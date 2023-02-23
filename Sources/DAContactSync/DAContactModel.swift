@@ -16,14 +16,14 @@ public enum ContactStatus : Codable {
 }
 
 public class DAContactModel: Codable {
-    var phone: [Phone]?
-    var name: String?
-    var email: [String]?
-    var id: String?
-    var address: [String]?
-    var createdDate : String?
-    var updatedDate : String?
-    var status : ContactStatus = .normal
+    public var phone: [Phone]?
+    public var name: String?
+    public var email: [String]?
+    public var id: String?
+    public var address: [String]?
+    public var createdDate : String?
+    public var updatedDate : String?
+    public var status : ContactStatus = .normal
 
     enum CodingKeys: String, CodingKey {
         case phone = "phone"
@@ -38,8 +38,8 @@ public class DAContactModel: Codable {
 
 // MARK: - Phone
 public class Phone: Codable {
-    var code: String?
-    var number: String?
+    public var code: String?
+    public var number: String?
 
     enum CodingKeys: String, CodingKey {
         case code = "code"
@@ -50,14 +50,14 @@ public class Phone: Codable {
 
 // MARK: - Address
 public class Address: Codable {
-    var subLocality: String?
-    var street: String?
-    var subAdminitrativeArea: String?
-    var city: String?
-    var state: String?
-    var country: String?
-    var postalCode: String?
-    var isoCountryCode: String?
+    public var subLocality: String?
+    public var street: String?
+    public var subAdminitrativeArea: String?
+    public var city: String?
+    public var state: String?
+    public var country: String?
+    public var postalCode: String?
+    public var isoCountryCode: String?
     
 
     enum CodingKeys: String, CodingKey {
