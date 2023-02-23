@@ -112,9 +112,33 @@ public func fetchContacts(matching phoneNumber: CNPhoneNumber, keysToFetch: [CNK
 /// - Returns: returns either a success or a failure,
 /// on sucess: returns array of contacts
 /// on error: error information, if an error occurred.
-public func fetchContacts(withIdentifiers identifiers: [String], keysToFetch: [CNKeyDescriptor] = [CNContactVCardSerialization.descriptorForRequiredKeys()], _ completion: @escaping (Result<[CNContact], Error>) -> Void) {
+public func fetchContacts(withIdentifiers identifiers: [String], keysToFetch: [CNKeyDescriptor] = [CNContactVCardSerialization.descriptorForRequiredKeys()], _ completion: @escaping (Result<[DAContactModel]?, Error>) -> Void) {
     do {
-        completion(.success(try ContactStore.default.unifiedContacts(matching: CNContact.predicateForContacts(withIdentifiers: identifiers), keysToFetch: keysToFetch)))
+        var contacts : [DAContactModel]?
+        for identifier in identifiers {
+            
+            let contatct = try ContactStore.default.unifiedContact(withIdentifier: identifier, keysToFetch: keysToFetch)
+            contacts?.append(getContactModel(contact: contatct))
+        }
+        completion(.success(contacts))
+    } catch {
+        completion(.failure(error))
+    }
+}
+
+/// To fetch contacts matching contact identifiers.
+/// - Parameters:
+///   - identifier: Contact identifiers to be matched.
+///   - keysToFetch: The contact fetch request that specifies the search criteria.
+/// - Returns: returns either a success or a failure,
+/// on sucess: returns array of contacts
+/// on error: error information, if an error occurred.
+public func fetchContacts(withIdentifiers identifier: String, keysToFetch: [CNKeyDescriptor] = [CNContactVCardSerialization.descriptorForRequiredKeys()], _ completion: @escaping (Result<DAContactModel?, Error>) -> Void) {
+    do {
+        var contactModel : DAContactModel?
+        let contatct = try ContactStore.default.unifiedContact(withIdentifier: identifier, keysToFetch: keysToFetch)
+        contactModel = getContactModel(contact: contatct)
+        completion(.success(contactModel))
     } catch {
         completion(.failure(error))
     }

@@ -103,9 +103,31 @@ public func fetchContacts(matching phoneNumber: CNPhoneNumber, keysToFetch: [CNK
 ///   - keysToFetch: The contact fetch request that specifies the search criteria.
 /// - Throws: Error information, if an error occurred.
 /// - Returns: Array  of contacts
-public func fetchContacts(withIdentifiers identifiers: [String], keysToFetch: [CNKeyDescriptor] = [CNContactVCardSerialization.descriptorForRequiredKeys()]) throws -> [CNContact] {
-    return try fetchContacts(predicate: CNContact.predicateForContacts(withIdentifiers: identifiers), keysToFetch: keysToFetch)
+public func fetchContacts(withIdentifiers identifiers: [String], keysToFetch: [CNKeyDescriptor] = [CNContactVCardSerialization.descriptorForRequiredKeys()]) throws -> [DAContactModel]? {
+    var contacts : [DAContactModel]?
+    for identifier in identifiers {
+        let contatct = try ContactStore.default.unifiedContact(withIdentifier: identifier, keysToFetch: keysToFetch)
+        contacts?.append(getContactModel(contact: contatct))
+    }
+    return contacts
 }
+
+
+/// To fetch contacts matching contact identifiers.
+/// - Parameters:
+///   - identifier: Contact identifiers to be matched.
+///   - keysToFetch: The contact fetch request that specifies the search criteria.
+/// - Throws: Error information, if an error occurred.
+/// - Returns: Array  of contacts
+public func fetchContacts(withIdentifiers identifier: String, keysToFetch: [CNKeyDescriptor] = [CNContactVCardSerialization.descriptorForRequiredKeys()]) throws -> DAContactModel? {
+    
+    var contactModel : DAContactModel?
+    let contatct = try ContactStore.default.unifiedContact(withIdentifier: identifier, keysToFetch: keysToFetch)
+    contactModel = getContactModel(contact: contatct)
+    return contactModel
+}
+
+
 
 /// To fetch contacts matching group identifier
 /// - Parameters:

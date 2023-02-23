@@ -28,6 +28,14 @@ class ViewController: UIViewController {
         if let arr = notification.object as? [DAContactUpdateModel] {
             for model in arr {
                 print("id : \(model.id) && status : \(model.status)")
+                fetchContact(withIdentifier: model.id ?? "") { result in
+                    switch result {
+                    case let .success(contact):
+                      print(contact)
+                    case let .failure(error):
+                      print(error.localizedDescription)
+                    }
+                }
             }
         }
     }
