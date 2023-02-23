@@ -7,6 +7,14 @@
 
 import Foundation
 
+public enum ContactStatus : Codable {
+    
+    case normal
+    case added
+    case updated
+    case deleted
+}
+
 public class DAContactModel: Codable {
     var phone: [Phone]?
     var name: String?
@@ -15,6 +23,7 @@ public class DAContactModel: Codable {
     var address: [String]?
     var createdDate : String?
     var updatedDate : String?
+    var status : ContactStatus = .normal
 
     enum CodingKeys: String, CodingKey {
         case phone = "phone"

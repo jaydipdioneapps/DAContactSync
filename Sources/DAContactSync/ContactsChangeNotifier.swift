@@ -1,7 +1,8 @@
 //
 //  ContactsChangeNotifier.swift
 //
-//  Created by Yonat Sharon on 10/07/2022.
+//
+//  Created by Paras Navadiya on 18/02/23.
 //
 
 import Contacts
@@ -62,6 +63,9 @@ open class ContactsChangeNotifier: NSObject {
     public let store: CNContactStore
     
     private var changeContact: [String] = []
+    
+    public var arrIdentifiers : [DAContactUpdateModel] = [DAContactUpdateModel]()
+
 
     /// Spec of which changes to observe.
     ///
@@ -156,33 +160,54 @@ open class ContactsChangeNotifier: NSObject {
     /// Get contacts change events and post them in a `didChangeNotification`
     private func forwardChangeHistoryEvents() {
         do {
-            var changes = try changeHistory()
+            let changes = try changeHistory()
             lastHistoryToken = store.currentHistoryToken
             let changeHistoryEvents = changes.compactMap { $0 as? CNChangeHistoryEvent }
             guard !changeHistoryEvents.isEmpty else { return }
-            guard let events: [CNChangeHistoryEvent]? = changeHistoryEvents else { return }
-//            NotificationCenter.default
-//                .post(name: NSNotification.Name("contact_update"),
-//                      object: nil,
-//                      userInfo: nil)
-//            for event in events ?? [] {
-//                print(event.changeDescription)
-//            }
+            
+            print(getContactIdentifiersArray(changeHistoryEvents: changeHistoryEvents))
+            
             DispatchQueue.main.async { [weak self] in
-                self?.postNotification(changeHistoryEvents: changeHistoryEvents)
+                self?.postNotification(arr: self?.getContactIdentifiersArray(changeHistoryEvents: changeHistoryEvents) ?? [])
             }
+            
+            
         } catch {
             #if DEBUG
             print("ContactsChangeNotifier failed to get Contacts change history:", error.localizedDescription)
             #endif
         }
     }
-    private func postNotification(changeHistoryEvents: [CNChangeHistoryEvent]) {
-        NotificationCenter.default.post(
-            name: Self.didChangeNotification,
-            object: self,
-            userInfo: [Notification.contactsChangeEventsKey: changeHistoryEvents]
-        )
+    private func postNotification(arr: [DAContactUpdateModel] = []) {
+        NotificationCenter.default.post(name: Notification.Name("contactChanged"), object: arr)
+    }
+    
+    public func getContactIdentifiersArray(changeHistoryEvents : [CNChangeHistoryEvent]) -> [DAContactUpdateModel] {
+        
+        arrIdentifiers.removeAll()
+        for changeHistoryEvent in changeHistoryEvents {
+            
+            switch changeHistoryEvent {
+            case let addEvent as CNChangeHistoryAddContactEvent:
+                print("Add **\(addEvent.contact.fullName)** `\(addEvent.contact.identifier)`")
+                let model = DAContactUpdateModel(id: addEvent.contact.identifier, status: ContactStatus.added)
+                arrIdentifiers.append(model)
+            case let updateEvent as CNChangeHistoryUpdateContactEvent:
+                print("Update **\(updateEvent.contact.fullName)** `\(updateEvent.contact.identifier)`")
+                let model = DAContactUpdateModel(id: updateEvent.contact.identifier, status: ContactStatus.updated)
+                arrIdentifiers.append(model)
+            case let deleteEvent as CNChangeHistoryDeleteContactEvent:
+                print("Delete `\(deleteEvent.contactIdentifier)`")
+                let model = DAContactUpdateModel(id: deleteEvent.contactIdentifier, status: ContactStatus.deleted)
+                arrIdentifiers.append(model)
+            case _ as CNChangeHistoryDropEverythingEvent:
+                print("Initial update")
+            default:
+                print("Group event")
+            }
+        }
+        
+        return arrIdentifiers
     }
 }
 
@@ -222,23 +247,5 @@ extension UIApplication {
 extension CNContact {
     var fullName: String {
         CNContactFormatter.string(from: self, style: .fullName) ?? "Unknown"
-    }
-}
-
-extension CNChangeHistoryEvent {
-    var changeDescription: String {
-        switch self {
-        case let addEvent as CNChangeHistoryAddContactEvent:
-            
-            return "Add **\(addEvent.contact.fullName)** `\(addEvent.contact.identifier)`"
-        case let updateEvent as CNChangeHistoryUpdateContactEvent:
-            return "Update **\(updateEvent.contact.fullName)** `\(updateEvent.contact.identifier)`"
-        case let deleteEvent as CNChangeHistoryDeleteContactEvent:
-            return "Delete `\(deleteEvent.contactIdentifier)`"
-        case _ as CNChangeHistoryDropEverythingEvent:
-            return "Initial update"
-        default:
-            return "Group event"
-        }
     }
 }

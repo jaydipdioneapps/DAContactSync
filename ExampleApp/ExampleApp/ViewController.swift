@@ -20,18 +20,18 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         getContacts()
-        print(contactsChangeNotifier!)
-        NotificationCenter.default.addObserver(self, selector: #selector(contactsStoreChanged), name: NSNotification.Name.CNContactStoreDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(contactsStoreChanged(_:)), name: Notification.Name("contactChanged"),object: nil)
     }
     
-   
-    @objc func contactsStoreChanged(_ notification: Notification){
-        print("Contact updated : \(notification.userInfo)")
-        guard let events = notification.contactsChangeEvents else { return }
-        events.map { temp in
-            debugPrint("Change history : \(temp)")
+    @objc func contactsStoreChanged(_ notification: Notification) {
+        
+        if let arr = notification.object as? [DAContactUpdateModel] {
+            for model in arr {
+                print("id : \(model.id) && status : \(model.status)")
+            }
         }
     }
+    
     func getContacts() {
         requestAccess { result in
           switch result {
