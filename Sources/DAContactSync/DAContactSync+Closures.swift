@@ -364,7 +364,12 @@ public func deleteContact(_ contact: CNContact, from group: CNGroup, _ completio
 public func getContactModel(contact : CNContact) -> DAContactModel {
     var arrPhone : [Phone] = [Phone]()
     for phoneNumber in contact.phoneNumbers {
-        let phone = Phone(code: phoneNumber.value.value(forKey: "countryCode") as? String ?? "", number: phoneNumber.value.value(forKey: "digits") as? String ?? "")
+        let cCode = phoneNumber.value.value(forKey: "countryCode") as? String ?? "+1"
+        var cNumner = phoneNumber.value.value(forKey: "digits") as? String ?? ""
+        let countryCode = cCode.getCountryCode()
+        cNumner = cNumner.replacingOccurrences(of: countryCode, with: "")
+        
+        let phone = Phone(code: countryCode, number: cNumner)
         arrPhone.append(phone)
     }
     
