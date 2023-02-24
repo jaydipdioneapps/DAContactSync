@@ -362,16 +362,9 @@ public func deleteContact(_ contact: CNContact, from group: CNGroup, _ completio
 
 
 public func getContactModel(contact : CNContact) -> DAContactModel {
-    
-    let model = DAContactModel()
-    model.name = contact.givenName + contact.familyName
-    model.id = contact.identifier
-    
     var arrPhone : [Phone] = [Phone]()
     for phoneNumber in contact.phoneNumbers {
-        let phone = Phone()
-        phone.code = phoneNumber.value.value(forKey: "countryCode") as? String ?? ""
-        phone.number = phoneNumber.value.value(forKey: "digits") as? String ?? ""
+        let phone = Phone(code: phoneNumber.value.value(forKey: "countryCode") as? String ?? "", number: phoneNumber.value.value(forKey: "digits") as? String ?? "")
         arrPhone.append(phone)
     }
     
@@ -382,18 +375,10 @@ public func getContactModel(contact : CNContact) -> DAContactModel {
     
     var arrAddress : [Address] = [Address]()
     for address in contact.postalAddresses {
-        let addressModel = Address()
-        addressModel.street = address.value.street
-        addressModel.subLocality = address.value.subLocality
-        addressModel.subAdminitrativeArea = address.value.subAdministrativeArea
-        addressModel.city = address.value.city
-        addressModel.state = address.value.state
-        addressModel.country = address.value.country
-        addressModel.postalCode = address.value.postalCode
-        addressModel.isoCountryCode = address.value.isoCountryCode
+        let addressModel = Address(subLocality: address.value.subLocality, street: address.value.street, subAdminitrativeArea: address.value.subAdministrativeArea, city: address.value.city, state: address.value.state, country: address.value.country, postalCode: address.value.postalCode, isoCountryCode: address.value.isoCountryCode)
         arrAddress.append(addressModel)
     }
-    model.phone = arrPhone
     
+    let model = DAContactModel(phone: arrPhone, name: contact.givenName + contact.familyName, email: arrEmail, id: contact.identifier, address: arrAddress, createdDate: "", updatedDate: "", status: ContactStatus.normal)
     return model
 }
