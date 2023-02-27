@@ -8,8 +8,6 @@
 import Foundation
 
 public enum ContactStatus : Codable {
-    
-    case normal
     case added
     case updated
     case deleted
@@ -23,7 +21,7 @@ public class DAContactModel: Codable {
     public var address: [Address]?
     public var createdDate : String?
     public var updatedDate : String?
-    public var status : ContactStatus = .normal
+    public var status : ContactStatus = .added
 
     public init(phone: [Phone], name: String, email: [String], id: String, address: [Address], createdDate : String, updatedDate : String, status : ContactStatus) {
         self.phone = phone

@@ -9,7 +9,7 @@ import Foundation
 
 public class DAContactUpdateModel: Codable {
     public var id: String?
-    public var status : ContactStatus = .normal
+    public var status : ContactStatus = .added
 
     public init(id: String, status: ContactStatus) {
         self.id = id

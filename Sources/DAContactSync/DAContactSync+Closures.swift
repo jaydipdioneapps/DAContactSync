@@ -384,6 +384,6 @@ public func getContactModel(contact : CNContact) -> DAContactModel {
         arrAddress.append(addressModel)
     }
     
-    let model = DAContactModel(phone: arrPhone, name: contact.givenName + contact.familyName, email: arrEmail, id: contact.identifier, address: arrAddress, createdDate: "", updatedDate: "", status: ContactStatus.normal)
+    let model = DAContactModel(phone: arrPhone, name: contact.givenName + contact.familyName, email: arrEmail, id: contact.identifier, address: arrAddress, createdDate: "", updatedDate: "", status: ContactStatus.added)
     return model
 }
