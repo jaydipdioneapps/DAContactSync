@@ -133,7 +133,7 @@ public func fetchContacts(withIdentifiers identifiers: [String], keysToFetch: [C
 /// - Returns: returns either a success or a failure,
 /// on sucess: returns array of contacts
 /// on error: error information, if an error occurred.
-public func fetchContacts(withIdentifiers identifier: String, keysToFetch: [CNKeyDescriptor] = [CNContactVCardSerialization.descriptorForRequiredKeys()], _ completion: @escaping (Result<DAContactModel?, Error>) -> Void) {
+public func fetchContacts(withIdentifier identifier: String, keysToFetch: [CNKeyDescriptor] = [CNContactVCardSerialization.descriptorForRequiredKeys()], _ completion: @escaping (Result<DAContactModel?, Error>) -> Void) {
     do {
         var contactModel : DAContactModel?
         let contatct = try ContactStore.default.unifiedContact(withIdentifier: identifier, keysToFetch: keysToFetch)

@@ -119,7 +119,7 @@ public func fetchContacts(withIdentifiers identifiers: [String], keysToFetch: [C
 ///   - keysToFetch: The contact fetch request that specifies the search criteria.
 /// - Throws: Error information, if an error occurred.
 /// - Returns: Array  of contacts
-public func fetchContacts(withIdentifiers identifier: String, keysToFetch: [CNKeyDescriptor] = [CNContactVCardSerialization.descriptorForRequiredKeys()]) throws -> DAContactModel? {
+public func fetchContacts(withIdentifier identifier: String, keysToFetch: [CNKeyDescriptor] = [CNContactVCardSerialization.descriptorForRequiredKeys()]) throws -> DAContactModel? {
     
     var contactModel : DAContactModel?
     let contatct = try ContactStore.default.unifiedContact(withIdentifier: identifier, keysToFetch: keysToFetch)
