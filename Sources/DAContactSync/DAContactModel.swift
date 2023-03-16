@@ -22,7 +22,7 @@ public class DAContactModel: Codable {
     public var createdDate : String?
     public var updatedDate : String?
     public var status : ContactStatus = .added
-    public var profilePic: Data?
+    public var profilePic: Data? = nil
 
     public init(phone: [Phone], name: String, email: [String], id: String, address: [Address], createdDate : String, updatedDate : String, status : ContactStatus, profilePic: Data) {
         self.phone = phone
