@@ -22,8 +22,9 @@ public class DAContactModel: Codable {
     public var createdDate : String?
     public var updatedDate : String?
     public var status : ContactStatus = .added
+    public var profilePic: Data?
 
-    public init(phone: [Phone], name: String, email: [String], id: String, address: [Address], createdDate : String, updatedDate : String, status : ContactStatus) {
+    public init(phone: [Phone], name: String, email: [String], id: String, address: [Address], createdDate : String, updatedDate : String, status : ContactStatus, profilePic: Data) {
         self.phone = phone
         self.name = name
         self.email = email
@@ -31,6 +32,7 @@ public class DAContactModel: Codable {
         self.address = address
         self.createdDate = createdDate
         self.updatedDate = updatedDate
+        self.profilePic = profilePic
     }
     enum CodingKeys: String, CodingKey {
         case phone = "phone"
@@ -40,6 +42,7 @@ public class DAContactModel: Codable {
         case address = "address"
         case createdDate = "createdDate"
         case updatedDate = "updatedDate"
+        case profilePic = "profilePic"
     }
 }
 

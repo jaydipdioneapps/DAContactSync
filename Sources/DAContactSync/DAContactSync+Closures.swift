@@ -363,6 +363,7 @@ public func deleteContact(_ contact: CNContact, from group: CNGroup, _ completio
 
 public func getContactModel(contact : CNContact) -> DAContactModel {
     var arrPhone : [Phone] = [Phone]()
+    
     for phoneNumber in contact.phoneNumbers {
         let cCode = phoneNumber.value.value(forKey: "countryCode") as? String ?? "+1"
         var cNumner = phoneNumber.value.value(forKey: "digits") as? String ?? ""
@@ -384,6 +385,6 @@ public func getContactModel(contact : CNContact) -> DAContactModel {
         arrAddress.append(addressModel)
     }
     
-    let model = DAContactModel(phone: arrPhone, name: contact.givenName + contact.familyName, email: arrEmail, id: contact.identifier, address: arrAddress, createdDate: "", updatedDate: "", status: ContactStatus.added)
+    let model = DAContactModel(phone: arrPhone, name: contact.givenName + contact.familyName, email: arrEmail, id: contact.identifier, address: arrAddress, createdDate: "", updatedDate: "", status: ContactStatus.added, profilePic: contact.imageData!)
     return model
 }
