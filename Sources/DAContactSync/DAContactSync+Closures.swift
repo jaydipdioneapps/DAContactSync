@@ -33,6 +33,11 @@ public func requestAccess(_ completion: @escaping (Result<Bool, Error>) -> Void)
  public func fetchContacts(keysToFetch: [CNKeyDescriptor] = [CNContactVCardSerialization.descriptorForRequiredKeys()], order: CNContactSortOrder = .none, unifyResults: Bool = true, _ completion: @escaping (Result<[DAContactModel], Error>) -> Void) {
     do {
         var contacts: [DAContactModel] = [DAContactModel]()
+        let keysToFetch: [CNKeyDescriptor] = [
+            CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+            CNContactPhoneNumbersKey as CNKeyDescriptor
+        ]
+
         let fetchRequest = CNContactFetchRequest(keysToFetch: keysToFetch)
         fetchRequest.unifyResults = unifyResults
         fetchRequest.sortOrder = order

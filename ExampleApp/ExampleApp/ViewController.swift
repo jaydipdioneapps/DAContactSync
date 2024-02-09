@@ -45,7 +45,13 @@ class ViewController: UIViewController {
           switch result {
           case let .success(bool):
             print(bool)
-            fetchContacts { result in
+            fetchContacts(keysToFetch:[CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+                                       CNContactImageDataKey,
+                                       CNContactEmailAddressesKey,
+                                       CNContactPhoneNumbersKey,
+                                       CNContactJobTitleKey,
+                                       CNContactBirthdayKey,
+                                       CNContactPostalAddressesKey]) { result in
               switch result {
               case let .success(contacts):
                 print(contacts)
