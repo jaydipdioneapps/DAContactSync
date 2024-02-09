@@ -35,7 +35,8 @@ public func requestAccess(_ completion: @escaping (Result<Bool, Error>) -> Void)
         var contacts: [DAContactModel] = [DAContactModel]()
         let keysToFetch: [CNKeyDescriptor] = [
             CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
-            CNContactPhoneNumbersKey as CNKeyDescriptor
+            CNContactPhoneNumbersKey as CNKeyDescriptor,
+            CNContactEmailAddressesKey as CNKeyDescriptor
         ]
 
         let fetchRequest = CNContactFetchRequest(keysToFetch: keysToFetch)
