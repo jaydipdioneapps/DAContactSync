@@ -37,7 +37,13 @@ public func requestAccess(_ completion: @escaping (Result<Bool, Error>) -> Void)
             CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
             CNContactPhoneNumbersKey as CNKeyDescriptor,
             CNContactEmailAddressesKey as CNKeyDescriptor,
-            CNContactPostalAddressesKey as CNKeyDescriptor
+            CNContactPostalAddressesKey as CNKeyDescriptor,
+            CNContactImageDataKey as CNKeyDescriptor,
+            CNContactJobTitleKey as CNKeyDescriptor,
+            CNContactBirthdayKey as CNKeyDescriptor,
+            CNContactGivenNameKey as CNKeyDescriptor,
+            CNContactFamilyNameKey as CNKeyDescriptor,
+            CNContactIdentifierKey as CNKeyDescriptor
         ]
 
         let fetchRequest = CNContactFetchRequest(keysToFetch: keysToFetch)
