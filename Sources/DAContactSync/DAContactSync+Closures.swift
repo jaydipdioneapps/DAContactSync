@@ -373,7 +373,18 @@ public func deleteContact(_ contact: CNContact, from group: CNGroup, _ completio
     }
 }
 
-
+public func getContacName(givenName : String, familyName: String) -> String {
+    if givenName != "" && familyName != "" {
+        return givenName + " " + familyName
+    } else if givenName == "" && familyName != "" {
+        return familyName
+    } else if givenName != "" && familyName == "" {
+        return givenName
+    } else {
+        return ""
+    }
+    
+}
 public func getContactModel(contact : CNContact) -> DAContactModel {
     var arrPhone : [Phone] = [Phone]()
     
@@ -398,6 +409,6 @@ public func getContactModel(contact : CNContact) -> DAContactModel {
         arrAddress.append(addressModel)
     }
     
-    let model = DAContactModel(phone: arrPhone, name: contact.givenName + contact.familyName, email: arrEmail, id: contact.identifier, address: arrAddress, createdDate: "", updatedDate: "", status: ContactStatus.added, profilePic: contact.imageData)
+    let model = DAContactModel(phone: arrPhone, name: getContacName(givenName: contact.givenName, familyName: contact.familyName), email: arrEmail, id: contact.identifier, address: arrAddress, createdDate: "", updatedDate: "", status: ContactStatus.added, profilePic: contact.imageData)
     return model
 }
