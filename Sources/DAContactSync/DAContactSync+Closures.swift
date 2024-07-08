@@ -373,13 +373,37 @@ public func deleteContact(_ contact: CNContact, from group: CNGroup, _ completio
     }
 }
 
-public func getContacName(givenName : String, familyName: String) -> String {
-    if givenName != "" && familyName != "" {
+public func getContacName(givenName : String,middleName: String, familyName: String, companyName: String) -> String {
+    if givenName != "" && middleName != "" && familyName != "" && companyName != "" {
+        return givenName + " " + middleName + " " + familyName + " " + companyName
+    } else if givenName == "" && middleName != "" && familyName != "" && companyName != ""  {
+        return middleName + " " + familyName + " " + companyName
+    } else if givenName != "" && middleName == "" && familyName != "" && companyName != "" {
+        return givenName + " " + familyName + " " + companyName
+    } else if givenName != "" && middleName != "" && familyName == "" && companyName != "" {
+        return givenName + " " + middleName + " " + companyName
+    } else if givenName != "" && middleName != "" && familyName != "" && companyName == "" {
+        return givenName + " " + middleName + " " + familyName
+    } else if givenName == "" && middleName == "" && familyName != "" && companyName != "" {
+        return familyName + " " + companyName
+    } else if givenName != "" && middleName == "" && familyName == "" && companyName != "" {
+        return givenName + " " + companyName
+    } else if givenName != "" && middleName != "" && familyName == "" && companyName == "" {
+        return givenName + " " + middleName
+    } else if givenName == "" && middleName != "" && familyName == "" && companyName != "" {
+        return middleName + " " + companyName
+    } else if givenName == "" && middleName != "" && familyName != "" && companyName == "" {
+        return middleName + " " + familyName
+    } else if givenName != "" && middleName == "" && familyName != "" && companyName == "" {
         return givenName + " " + familyName
-    } else if givenName == "" && familyName != "" {
-        return familyName
-    } else if givenName != "" && familyName == "" {
+    } else if givenName != "" && middleName == "" && familyName == "" && companyName == "" {
         return givenName
+    } else if givenName == "" && middleName != "" && familyName == "" && companyName == "" {
+        return middleName
+    } else if givenName == "" && middleName == "" && familyName != "" && companyName == "" {
+        return familyName
+    } else if givenName == "" && middleName == "" && familyName == "" && companyName != "" {
+        return companyName
     } else {
         return ""
     }
@@ -409,6 +433,6 @@ public func getContactModel(contact : CNContact) -> DAContactModel {
         arrAddress.append(addressModel)
     }
     
-    let model = DAContactModel(phone: arrPhone, name: getContacName(givenName: contact.givenName, familyName: contact.familyName), email: arrEmail, id: contact.identifier, address: arrAddress, createdDate: "", updatedDate: "", status: ContactStatus.added, profilePic: contact.imageData)
+    let model = DAContactModel(phone: arrPhone, name: getContacName(givenName: contact.givenName,middleName: contact.middleName ,familyName: contact.familyName, companyName: contact.organizationName), email: arrEmail, id: contact.identifier, address: arrAddress, createdDate: "", updatedDate: "", status: ContactStatus.added, profilePic: contact.imageData)
     return model
 }
