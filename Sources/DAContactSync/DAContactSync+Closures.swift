@@ -50,7 +50,10 @@ public func requestAccess(_ completion: @escaping (Result<Bool, Error>) -> Void)
         fetchRequest.unifyResults = unifyResults
         fetchRequest.sortOrder = order
         try ContactStore.default.enumerateContacts(with: fetchRequest) { contact, _ in
-            contacts.append(getContactModel(contact: contact))
+            let contactModel = getContactModel(contact: contact)
+            if contactModel.phone?.count ?? 0 > 0 {
+                contacts.append(contactModel)
+            }
         }
         completion(.success(contacts))
     } catch {
@@ -131,7 +134,10 @@ public func fetchContacts(withIdentifiers identifiers: [String], keysToFetch: [C
         for identifier in identifiers {
             
             let contatct = try ContactStore.default.unifiedContact(withIdentifier: identifier, keysToFetch: keysToFetch)
-            contacts?.append(getContactModel(contact: contatct))
+            let contactModel = getContactModel(contact: contatct)
+            if contactModel.phone?.count ?? 0 > 0 {
+                contacts?.append(contactModel)
+            }
         }
         completion(.success(contacts))
     } catch {
@@ -151,7 +157,11 @@ public func fetchSingleContact(withIdentifiers identifier: String, keysToFetch: 
         var contactModel : DAContactModel?
         let contatct = try ContactStore.default.unifiedContact(withIdentifier: identifier, keysToFetch: keysToFetch)
         contactModel = getContactModel(contact: contatct)
-        completion(.success(contactModel))
+        if contactModel?.phone?.count ?? 0 > 0 {
+            completion(.success(contactModel))
+        } else {
+            completion(.success(nil))
+        }
     } catch {
         completion(.failure(error))
     }
@@ -418,8 +428,11 @@ public func getContactModel(contact : CNContact) -> DAContactModel {
         let countryCode = cCode.getCountryCode()
         cNumner = cNumner.replacingOccurrences(of: countryCode, with: "")
         
-        let phone = Phone(code: countryCode, number: cNumner)
-        arrPhone.append(phone)
+        let alphabetSet = CharacterSet.letters
+        if cNumner.rangeOfCharacter(from: alphabetSet) == nil {
+            let phone = Phone(code: countryCode, number: cNumner)
+            arrPhone.append(phone)
+        }
     }
     
     var arrEmail : [String] = [String]()
