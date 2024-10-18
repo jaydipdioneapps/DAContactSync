@@ -429,7 +429,10 @@ public func getContactModel(contact : CNContact) -> DAContactModel {
         cNumner = cNumner.replacingOccurrences(of: countryCode, with: "")
         
         let alphabetSet = CharacterSet.letters
-        if cNumner.rangeOfCharacter(from: alphabetSet) == nil {
+        let specialCharacterSet = CharacterSet.punctuationCharacters.union(.symbols)
+        let combinedSet = alphabetSet.union(specialCharacterSet)
+
+        if cNumner.rangeOfCharacter(from: combinedSet) == nil {
             let phone = Phone(code: countryCode, number: cNumner)
             arrPhone.append(phone)
         }
